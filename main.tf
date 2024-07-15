@@ -24,13 +24,20 @@ resource "aws_vpc" "new_vpc" {
   }
 }
 
-# Cria o Internet Gateway
-resource "aws_internet_gateway" "example_igw" {
+# Cria o Internet Gateway e associa à VPC
+resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.new_vpc.id
 
   tags = {
-    Name = "Internet Gateway"
+    Name = "main_gateway"
   }
+}
+
+# Cria a rota na tabela de rotas para o Internet Gateway
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_vpc.new_vpc.main_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 # Cria a sub-rede pública
@@ -42,13 +49,6 @@ resource "aws_subnet" "new_subnet_public" {
   tags = {
     Name = "new_subnet_public"
   }
-}
-
-# Associa o Internet Gateway à tabela de rotas da VPC
-resource "aws_route" "route_internet_gateway" {
-  route_table_id         = aws_vpc.new_vpc.main_route_table_id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.example_igw.id
 }
 
 # Grupo de Segurança para permitir tráfego SSH e HTTP
@@ -113,7 +113,6 @@ resource "aws_instance" "new_ec2" {
 
   tags = {
     Name = "Server01-Terraform"
-    # Insira o nome da instância de sua preferência.
   }
 }
 

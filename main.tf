@@ -122,3 +122,4 @@ output "ec2_public_ip" {
   description = "O endereço IP público da instância EC2"
   value       = aws_instance.new_ec2.public_ip
 }
+bbb

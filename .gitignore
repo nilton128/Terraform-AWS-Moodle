@@ -3,4 +3,18 @@ terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
 provider.tf
-.terraform/
+**/.terraform/*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
